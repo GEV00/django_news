@@ -7,10 +7,20 @@
     <title>Создание комментария</title>
 </head>
 <body>
-    <form method="post" action="">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <button type="submit">Опубликовать комментарий</button>
-    </form>
+    {% if request.user.is_authenticated %}
+        <form method="post" action="">
+            {% csrf_token %}
+            <p><label for="id_username">Имя:</label>
+            <input type="text" name="username" maxlength="30" required id="id_username" value="{{request.user.username}}" readonly></p>
+            <p><label for="id_content">Текст:</label> <textarea name="content" cols="40" rows="10" required id="id_content"></textarea></p>
+            <button type="submit">Опубликовать комментарий</button>
+        </form>
+    {% else %}
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Опубликовать комментарий</button>
+        </form>
+    {% endif %}
 </body>
 </html>

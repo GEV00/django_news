@@ -85,9 +85,11 @@ class CommentCreate(View):
 
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
+            if not request.user.is_authenticated:
+                username = comment_form.cleaned_data['username']
+                comment_form.cleaned_data['username'] = f"{username} (аноним)"
             comment_form.cleaned_data['new_id'] = news_id
             Comments.objects.create(**comment_form.cleaned_data)
             #редирект к комментируемой новости (просто шаг назад)
             return HttpResponseRedirect('../')
-
         return render(request, 'newspaper/create_comment.html', context={'comment_form':comment_form})

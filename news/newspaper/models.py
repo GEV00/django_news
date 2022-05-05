@@ -1,10 +1,12 @@
 from secrets import choice
 from django.db import models
 from matplotlib.pyplot import cla
+# Получим таблицу пользователей (модель по умолчанию):
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 class Comments(models.Model):
-
+  
     DELETE_CHOICES = [
         (True, 'Удалено администратором'),
         (False, '')
@@ -17,6 +19,9 @@ class Comments(models.Model):
 
     new = models.ForeignKey('News', on_delete=models.CASCADE, null=True,
                             related_name='news', verbose_name='Новость')
+    # один пользователь ко многим комментариям:
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True,
+                            related_name='user', verbose_name='Пользователь')
 
     def __str__(self):
         return f"{self.username}, {self.content[:15]}..."
