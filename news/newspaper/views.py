@@ -43,7 +43,7 @@ class NewsCreate(View):
 
         if news_form.is_valid():
             News.objects.create(**news_form.cleaned_data)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/newspaper/')
         
         return render(request, 'newspaper/create_news.html', context={'news_form':news_form})
 
