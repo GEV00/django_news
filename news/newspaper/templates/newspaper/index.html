@@ -10,18 +10,23 @@
     <h1>Новости</h1>
     {% if news_list %}
         {% for news in news_list %}
-            
+            {% if news.active %}
             <h2><a href='news/{{ news.id }}/'>{{ news.title }}</a></h2>
+            (Категория {{ news.tag }})
             <p>Дата создания: {{ news.created_at }}</p>
             <p>{{ news.content }}</p>
             <p>Дата обновления: {{ news.updated_at }}</p>
+            {% endif %}
         {% endfor %}
     {% else %}
         <h2>Новостей нет</h2>    
     {% endif %}
     
-    <! кнопка с ссылкой !>
+    <! кнопка с ссылкой при выполнении условия:!>
+    <! если есть разрешение на создание новости!>
+    <! то есть если ты верифицированный пользователь!>
+    {% if perms.newspaper.add_news %}
     <a href='create/'><button>Добавить новость</button></a>
-    
+    {% endif %}
 </body>
 </html>

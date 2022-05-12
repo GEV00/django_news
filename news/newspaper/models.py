@@ -5,6 +5,19 @@ from matplotlib.pyplot import cla
 from django.contrib.auth import get_user_model
 
 # Create your models here.
+
+
+class Tags(models.Model):
+
+    title = models.CharField(max_length=20, verbose_name='Тег', default='Другое')
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        db_table = 'Новостные теги'
+
+
 class Comments(models.Model):
   
     DELETE_CHOICES = [
@@ -42,8 +55,11 @@ class News(models.Model):
     content = models.TextField(verbose_name='Содержание')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    #теги для фильтрации:
+    tag = models.ForeignKey(Tags, on_delete=models.SET_DEFAULT, null=True, default='Другое',
+                            related_name='tag', verbose_name='Тег')
     #параметр choices задаеся для групповых действий
-    active = models.BooleanField(default=True, choices=ACTIVITY_CHOICES)
+    active = models.BooleanField(default=False, choices=ACTIVITY_CHOICES)
 
     def __str__(self):
         #через split убираем отображение долей секунды
@@ -54,3 +70,8 @@ class News(models.Model):
         #Отсортируем по дате публикации: сначала свежие.
         #для сортировки в обратном порядке указываем "-" перед параметром:
         ordering = ['-created_at']
+
+        permissions = (
+            ('can_activate', 'Can activate news'),
+        )
+

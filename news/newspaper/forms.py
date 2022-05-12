@@ -4,7 +4,7 @@ from newspaper.models import News, Comments
 class NewsForm(forms.ModelForm):
     class Meta:
         model = News
-        fields = ('title', 'content')
+        fields = ('title', 'content', 'tag')
 
 
 class CommentForm(forms.ModelForm):

@@ -18,5 +18,5 @@ class Profile(models.Model):
     class Meta:
         db_table = 'Информация о пользователе'
         permissions = (
-            ('can_verify', 'Может верифицировать'),
+            ('can_verify', 'Can Verify Users'),
         )

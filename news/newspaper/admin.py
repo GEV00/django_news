@@ -1,8 +1,12 @@
 from atexit import register
 from django.contrib import admin
-from newspaper.models import News, Comments
+from django.core.exceptions import PermissionDenied
+from newspaper.models import News, Comments, Tags
 # Register your models here.
 
+
+class TagsAdmin(admin.ModelAdmin):
+    list_display = ['title']
 #Применяем класс Tabular(Stacked)Inline к модели, в которой описана
 #связь ForeignKey. В нашем случае в Commets есть поле new - связь
 #ForeignKey с News.
@@ -10,8 +14,8 @@ class CommentsInLine(admin.TabularInline):
     model = Comments
 
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ['title', 'created_at', 'updated_at', 'active']
-    list_filter = ['active']
+    list_display = ['title', 'tag','created_at', 'updated_at', 'active']
+    list_filter = ['active', 'tag']
     #Подвязываем inlines через одноименное поле
     inlines = [CommentsInLine]
     #Описываем групповые дейстия:
@@ -19,9 +23,13 @@ class NewsAdmin(admin.ModelAdmin):
     actions = ['activate', 'deactivate']
     #описание первого действия
     def activate(self, request, queryset):
+        if not request.user.has_perm('newspaper.can_activate'):
+            return PermissionDenied('У вас нет прав для совершения этого действия')
         queryset.update(active=True)
     #описание второго дейтсвия
     def deactivate(self, request, queryset):
+        if not request.user.has_perm('newspaper.can_activate'):
+            return PermissionDenied('У вас нет прав для совершения этого действия')
         queryset.update(active=False)
     #визуализация действий в админке в выпадающем списке
     activate.short_description = 'Перевести новость в Активные'
@@ -44,3 +52,4 @@ class CommentsAdmin(admin.ModelAdmin):
 
 admin.site.register(News, NewsAdmin)
 admin.site.register(Comments, CommentsAdmin)
+admin.site.register(Tags, TagsAdmin)
