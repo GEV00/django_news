@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>News</title>
 </head>
 <body>
+    <! те же новости из index, только отсортированные в обратном порядке !>
     <h1>Новости</h1>
-    <! на изначальной странице данные !>
-    <! отсортированны по новизне по умолчанию !>
-    <! из модели, поэтому кпопка неюзабельная !>
+    <! данные отсортированны по дате по убыванию !>
+    <! поэтому кпопка "страые" неюзабельная !>
     <p>Сортировать по дате публикации:
-    <button type="button" disabled>Сначала новые</button> | 
-    <button><a href="/newspaper/oldest/">Сначала старые</a></button></p>
+    <button><a href="/newspaper/">Сначала новые</a></button> |
+    <button type="button" disabled>Сначала старые</button></p>
     {% if tags %}
-        <p>Сортировать по тегам: 
-            {% for tag in tags %}
-               <a href="/newspaper/tag/{{ tag.id }}/">{{ tag.title }}</a> |
-            {% endfor %}
-        </p>
+    <p>Сортировать по тегам: 
+        {% for tag in tags %}
+           <a href="/newspaper/tag/{{ tag.id }}/">{{ tag.title }}</a> |
+        {% endfor %}
+    </p>
     {% endif %}
     {% if news_list %}
         {% for news in news_list %}
-            <h2><a href='news/{{ news.id }}/'>{{ news.title }}</a></h2>
+            <h2><a href='/newspaper/news/{{ news.id }}/'>{{ news.title }}</a></h2>
             <i>(Категория: {{ news.tag }})</i>
             <p>Дата создания: {{ news.created_at }}</p>
             <p>{{ news.content }}</p>
@@ -37,7 +37,7 @@
     <! если есть разрешение на создание новости!>
     <! то есть если ты верифицированный пользователь!>
     {% if perms.newspaper.add_news %}
-    <a href='create/'><button>Добавить новость</button></a>
+    <a href='/newspaper/create/'><button>Добавить новость</button></a>
     {% endif %}
 </body>
 </html>

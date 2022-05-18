@@ -4,7 +4,9 @@ from newspaper import views
 
 urlpatterns = [
     path('', views.NewsView.as_view()),
+    path('oldest/', views.news_older),
     path('create/', views.NewsCreate.as_view()),
+    path('tag/<int:tag_id>/', views.NewsViewTag.as_view()),
     path('news/<int:news_id>/', views.NewsDetail.as_view()),
     path('news/<int:news_id>/add_comment/', views.CommentCreate.as_view()),
     path('news/<int:news_id>/edit/', views.NewsEdit.as_view())

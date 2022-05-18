@@ -2,7 +2,7 @@ from re import template
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views import View
-from newspaper.models import Comments, News
+from newspaper.models import Comments, News,Tags
 from newspaper.forms import CommentForm, NewsForm
 from django.views.generic import ListView, DetailView
 
@@ -13,7 +13,42 @@ class NewsView(ListView):
     model = News
     context_object_name = 'news_list'
     template_name = 'newspaper/index.html'
+    #переопределяем метод get_context_data для определения дополнительных
+    #ключей context помимо news_list
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Новости'
+        context['tags'] = Tags.objects.all()
+        return context
+    #переопредяем метод get_queryset для фильтрации ативных новостей
+    def get_queryset(self):
+        return News.objects.filter(active=True)
 
+#Представление для фильтрации новостей по тегам
+class NewsViewTag(ListView):
+
+    model = News
+    context_object_name = 'news_list'
+    template_name = 'newspaper/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Новости'
+        context['tags'] = Tags.objects.all()
+        return context
+    #переопределяем метод get_queryset для выдачи новостей с выбранными тегами
+    #и при этом активными
+    #tag _ _ id значит что фильтруем по id связанной модели, заданной в поле tag
+    def get_queryset(self):
+        return News.objects.filter(tag__id=self.kwargs['tag_id'], active=True)
+
+def news_older(request):
+    #принимаем сортированный по дата публикации новости из модели
+    news_list = News.objects.filter(active=True).order_by('created_at')
+    tags = Tags.objects.all()
+
+    return render(request, 'newspaper/index_old.html', context={'news_list':news_list,
+                                                                'tags':tags})
 
 
 class NewsDetail(View):
