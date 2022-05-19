@@ -22,6 +22,8 @@ class NewsView(ListView):
         return context
     #переопредяем метод get_queryset для фильтрации ативных новостей
     def get_queryset(self):
+        if self.request.GET.get('sorted')=='1': #проверка наличия параметра в строке для фильтрации по дате
+            return News.objects.filter(active=True).order_by('created_at')
         return News.objects.filter(active=True)
 
 #Представление для фильтрации новостей по тегам
@@ -40,7 +42,11 @@ class NewsViewTag(ListView):
     #и при этом активными
     #tag _ _ id значит что фильтруем по id связанной модели, заданной в поле tag
     def get_queryset(self):
+        if self.request.GET.get('sorted')=='1':#проверка передаваемого параметра из строки ссылки
+            print(self.request.GET.get('sorted'))
+            return News.objects.filter(tag__id=self.kwargs['tag_id'], active=True).order_by('created_at')
         return News.objects.filter(tag__id=self.kwargs['tag_id'], active=True)
+
 
 def news_older(request):
     #принимаем сортированный по дата публикации новости из модели

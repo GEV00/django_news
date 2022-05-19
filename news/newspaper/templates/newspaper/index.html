@@ -12,10 +12,10 @@
     <! отсортированны по новизне по умолчанию !>
     <! из модели, поэтому кпопка неюзабельная !>
     <p>Сортировать по дате публикации:
-    <button type="button" disabled>Сначала новые</button> | 
-    <button><a href="/newspaper/oldest/">Сначала старые</a></button></p>
+    <button><a href="?sorted=0">Сначала новые</a> </button> | 
+    <button><a href="?sorted=1">Сначала старые</a></button></p>
     {% if tags %}
-        <p>Сортировать по тегам: 
+        <p>Сортировать по тегам: <a href="/newspaper">Все</a> |
             {% for tag in tags %}
                <a href="/newspaper/tag/{{ tag.id }}/">{{ tag.title }}</a> |
             {% endfor %}
@@ -37,7 +37,7 @@
     <! если есть разрешение на создание новости!>
     <! то есть если ты верифицированный пользователь!>
     {% if perms.newspaper.add_news %}
-    <a href='create/'><button>Добавить новость</button></a>
+    <a href='/newspaper/create/'><button>Добавить новость</button></a>
     {% endif %}
 </body>
 </html>
