@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views import View
 from newspaper.models import Comments, News,Tags
+from user_auth.models import Profile
 from newspaper.forms import CommentForm, NewsForm
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 
 # Create your views here.
 
@@ -48,15 +49,6 @@ class NewsViewTag(ListView):
         return News.objects.filter(tag__id=self.kwargs['tag_id'], active=True)
 
 
-def news_older(request):
-    #принимаем сортированный по дата публикации новости из модели
-    news_list = News.objects.filter(active=True).order_by('created_at')
-    tags = Tags.objects.all()
-
-    return render(request, 'newspaper/index_old.html', context={'news_list':news_list,
-                                                                'tags':tags})
-
-
 class NewsDetail(View):
 
     def get(self, request, news_id):
@@ -81,11 +73,15 @@ class NewsCreate(View):
     def post(self, request):
 
         news_form = NewsForm(request.POST)
-
+        #добавление новости в БД
         if news_form.is_valid():
+            news_form.cleaned_data['author'] = request.user
             News.objects.create(**news_form.cleaned_data)
             return HttpResponseRedirect('/newspaper/')
         
+        #повышение счетчика публикованных новостей автора
+        
+
         return render(request, 'newspaper/create_news.html', context={'news_form':news_form})
 
 

@@ -2,6 +2,7 @@ from atexit import register
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from newspaper.models import News, Comments, Tags
+from user_auth.models import Profile
 # Register your models here.
 
 

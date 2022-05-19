@@ -9,8 +9,10 @@
 <body>
     <h1> {{ news_data.title }} </h1>
     <p> {{ news_data.content }} </p>
+    {% if request.user == news_data.author %}
     <! кнопка с ссылкой для редактирования новости !>
-    <a href='edit/'><button>Редактировать новость</button></a>
+        <a href='edit/'><button>Редактировать новость</button></a>
+    {% endif %}
     <h3>Комментарии</h3>
     {% if comments %}
         {% for comment in comments %}

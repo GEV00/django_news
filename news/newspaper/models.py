@@ -1,8 +1,7 @@
 from secrets import choice
 from django.db import models
-from matplotlib.pyplot import cla
 # Получим таблицу пользователей (модель по умолчанию):
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -33,7 +32,7 @@ class Comments(models.Model):
     new = models.ForeignKey('News', on_delete=models.CASCADE, null=True,
                             related_name='news', verbose_name='Новость')
     # один пользователь ко многим комментариям:
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True,
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
                             related_name='user', verbose_name='Пользователь')
 
     def __str__(self):
@@ -60,6 +59,8 @@ class News(models.Model):
                             related_name='tag', verbose_name='Тег')
     #параметр choices задаеся для групповых действий
     active = models.BooleanField(default=False, choices=ACTIVITY_CHOICES)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
+                                related_name='author', verbose_name='Автор')
 
     def __str__(self):
         #через split убираем отображение долей секунды

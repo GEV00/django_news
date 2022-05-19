@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.views import View
 from .forms import UserRegisterForm
 from .models import Profile
+from newspaper.models import News
 from django.contrib.auth import authenticate, login
 
 
@@ -46,4 +47,10 @@ class UserRegister(View):
 
 
 def profile(request):
+    #считаем количество новостей данного пользователя и добавляем это значение
+    #в БД пользователя.
+    profile = Profile.objects.filter(user=request.user)
+    num_of_news = len(News.objects.filter(active=True, author=request.user))
+    profile.update(num_of_news=num_of_news)
+
     return render(request, 'user_auth/profile.html', context={})
