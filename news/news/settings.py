@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'newspaper',
     'user_auth',
-    'app_media'
+    'app_media',
+    'app_logic', # уроки с тестами
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,16 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/newspaper/'
 
 SESSION_COOKIE_AGE = 30*24*60*60 #1 месяц
+
+#clxcxeqmcvlubhcm
+
+#Настройки для отправки почты
+EMAIL_HOST = 'smtp.yandex.ru' # настройка хоста smtp сервера
+EMAIL_PORT = 465    # порт smtp сервера
+EMAIL_HOST_USER = 'ernikgrigoryan@yandex.ru' # почта отпрвителя, у которого есть ключ для управления приложениями (из профиля в Я.ID)
+EMAIL_HOST_PASSWORD = 'clxcxeqmcvlubhcm'# ключ приложения из Я.ID (нельзя изменить, только получить новый)
+EMAIL_USE_TLS = False   # не используется TLS соединение
+EMAIL_USE_SSL = True    # используется SSL соединение
+
+SERVER_EMAIL = EMAIL_HOST_USER  # необходимо указать для отчетности яндексу
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER # также необходимая для работы настройка

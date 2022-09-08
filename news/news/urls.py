@@ -20,5 +20,6 @@ urlpatterns = [
     path('newspaper/', include('newspaper.urls')),
     path('', include('user_auth.urls')),
     path('admin/', admin.site.urls),
-    path('files/', include('app_media.urls'))
+    path('files/', include('app_media.urls')),
+    path('send_email/', include('app_logic.urls')),
 ]
